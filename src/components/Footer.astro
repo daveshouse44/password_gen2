@@ -1,0 +1,27 @@
+---
+import Icon from "astro-icon";
+import contactData from "../ts/contactData";
+---
+
+<footer>
+  <div
+    class="border-t-2 border-secondary"
+  >
+    <div
+      class="mx-auto flex max-w-screen-xl flex-col-reverse flex-wrap items-center justify-between gap-2 p-4 sm:flex-row"
+    >
+      <small class="font-semibold"
+        >&copy;&nbsp<span id="copyright"></span>&nbsp<a href="https://davetierney.dev" target="_blank" class="hover:text-primary">Dave Tierney</a></small
+      >
+      <div class="sm: flex gap-4 sm:gap-6">
+        {
+          contactData.map((item) => (
+            <a href={item.href}>
+              <Icon name={item.icon} class={item.class} />
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</footer>

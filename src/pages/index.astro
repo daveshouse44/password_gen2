@@ -1,16 +1,20 @@
 ---
+import MainLayout from "../layouts/MainLayout.astro";
 
+import Icon from "astro-icon";
 ---
-
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<MainLayout>
+  <div class="self-center grid place-items-center my-2 md:my-6">
+    <button
+      class="group grid h-8 w-8 place-items-center rounded-sm transition duration-300 hover:bg-secondary hover:bg-opacity-5"
+      data-theme-toggle
+      aria-label="toggle theme"
+    >
+      <Icon
+        name="bx:bxs-sun"
+        class="h-4 w-4 transition duration-300 group-hover:text-primary"
+      />
+    </button>
+    <h1 class="inline-block bg-gradient-to-br from-secondary via-primary to-accent text-3xl font-bold uppercase text-transparent bg-clip-text">Password Gen2</h1>
+  </div>
+</MainLayout>
