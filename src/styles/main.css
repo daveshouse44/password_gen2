@@ -33,4 +33,9 @@
     --color-secondary: 144deg 19% 15%;
     --color-accent: 284deg 100% 62%;
   }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }

@@ -18,6 +18,7 @@ const getTheme = () => {
     : "light";
 };
 
+//
 const setTheme = (theme: string) =>
   document.documentElement.setAttribute("data-theme", theme);
 
@@ -59,7 +60,66 @@ document
     if (passwordDisplay) {
       passwordDisplay.textContent = password;
     }
+    const copyButton = document.getElementById("copy-button");
+    if (copyButton && copyButton.classList.contains("invisible")) {
+      copyButton.classList.toggle("invisible");
+    }
+    const clearButton = document.getElementById("clear-button");
+    if (clearButton && clearButton.classList.contains("invisible")) {
+      clearButton.classList.toggle("invisible");
+    }
   });
+
+// Copy password to clipboard
+document.getElementById("copy-button")?.addEventListener("click", () => {
+  const passwordDisplay = document.getElementById("password-display");
+  if (passwordDisplay) {
+    navigator.clipboard.writeText(passwordDisplay.textContent || "");
+  }
+});
+
+document.getElementById("clear-button")?.addEventListener("click", () => {
+  // reset the form to initial state
+  const form = document.getElementById(
+    "password-generator-form"
+  ) as HTMLFormElement;
+  form.reset();
+
+  // Hide the copy button
+  const copyButton = document.getElementById("copy-button");
+  if (copyButton) {
+    copyButton.classList.toggle("invisible");
+  }
+
+  // Clear the password display
+  const passwordDisplay = document.getElementById("password-display");
+  if (passwordDisplay) {
+    passwordDisplay.textContent = "";
+  }
+
+  // Hide the clear button
+  const clearButton = document.getElementById("clear-button");
+  if (clearButton) {
+    clearButton.classList.toggle("invisible");
+  }
+});
+
+// Increment and decrement password length
+document.getElementById("increment-button")?.addEventListener("click", () => {
+  const lengthInput = document.getElementById("length") as HTMLInputElement;
+  const currentValue = Number(lengthInput.value);
+  if (currentValue < 128) {
+    lengthInput.value = String(currentValue + 1);
+  }
+});
+
+document.getElementById("decrement-button")?.addEventListener("click", () => {
+  const lengthInput = document.getElementById("length") as HTMLInputElement;
+  const currentValue = Number(lengthInput.value);
+  if (currentValue > 8) {
+    lengthInput.value = String(currentValue - 1);
+  }
+});
 
 function generatePassword(
   length: number,
