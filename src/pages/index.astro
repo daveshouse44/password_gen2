@@ -1,20 +1,24 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
+import PasswordGen from "../components/PasswordGen.astro";
 
 import Icon from "astro-icon";
 ---
 <MainLayout>
-  <div class="self-center grid place-items-center my-2 md:my-6">
-    <button
-      class="group grid h-8 w-8 place-items-center rounded-sm transition duration-300 hover:bg-secondary hover:bg-opacity-5"
-      data-theme-toggle
-      aria-label="toggle theme"
-    >
-      <Icon
-        name="bx:bxs-sun"
-        class="h-4 w-4 transition duration-300 group-hover:text-primary"
-      />
-    </button>
-    <h1 class="inline-block bg-gradient-to-br from-secondary via-primary to-accent text-3xl font-bold uppercase text-transparent bg-clip-text">Password Gen2</h1>
+  <div class="flex flex-col items-center h-full">
+    <section class="grid place-items-center my-2 md:my-6">
+      <button
+        class="group grid h-8 w-8 place-items-center rounded-sm transition duration-300 hover:bg-secondary hover:bg-opacity-5"
+        data-theme-toggle
+        aria-label="toggle theme"
+      >
+        <Icon
+          name="bx:bxs-sun"
+          class="h-4 w-4 transition duration-300 group-hover:text-primary"
+        />
+      </button>
+      <h1 class="inline-block bg-gradient-to-br from-secondary via-primary to-accent text-3xl font-bold uppercase text-transparent bg-clip-text">Password Gen2</h1>
+    </section>
+      <PasswordGen />
   </div>
 </MainLayout>
