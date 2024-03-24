@@ -71,19 +71,28 @@ document
   });
 
 // Copy password to clipboard
-document.getElementById("copy-button")?.addEventListener("click", () => {
-  const passwordDisplay = document.getElementById("password-display");
+document.getElementById("copy-button")?.addEventListener("click", function () {
+  const passwordDisplay =
+    document.getElementById("password-display")?.textContent;
   if (passwordDisplay) {
-    navigator.clipboard.writeText(passwordDisplay.textContent || "");
+    navigator.clipboard.writeText(passwordDisplay).then(
+      function () {
+        alert("Password copied to clipboard!");
+      },
+      function (err) {
+        console.error("Could not copy text: ", err);
+      }
+    );
   }
 });
 
+// reset the form to initial state
 document.getElementById("clear-button")?.addEventListener("click", () => {
-  // reset the form to initial state
   const form = document.getElementById(
     "password-generator-form"
   ) as HTMLFormElement;
   form.reset();
+  hasIncrementButtonBeenClicked = false;
 
   // Hide the copy button
   const copyButton = document.getElementById("copy-button");
@@ -104,10 +113,17 @@ document.getElementById("clear-button")?.addEventListener("click", () => {
   }
 });
 
+let hasIncrementButtonBeenClicked = false;
+
 // Increment and decrement password length
 document.getElementById("increment-button")?.addEventListener("click", () => {
   const lengthInput = document.getElementById("length") as HTMLInputElement;
-  const currentValue = Number(lengthInput.value);
+  let currentValue = Number(lengthInput.value);
+  // If the increment button has not been clicked before, set the initial value to 8
+  if (!hasIncrementButtonBeenClicked) {
+    currentValue = 7;
+    hasIncrementButtonBeenClicked = true;
+  }
   if (currentValue < 128) {
     lengthInput.value = String(currentValue + 1);
   }
@@ -121,6 +137,35 @@ document.getElementById("decrement-button")?.addEventListener("click", () => {
   }
 });
 
+document.getElementById("length")?.addEventListener("input", (event) => {
+  const input = event.target as HTMLInputElement;
+  if (input.value === "") {
+    hasIncrementButtonBeenClicked = false;
+  }
+});
+
+let timeoutId: number | null = null;
+
+const lengthElement = document.getElementById("length");
+if (lengthElement) {
+  lengthElement.addEventListener("input", function (e) {
+    // Clear the previous timeout if there is one
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    // Set a new timeout
+    timeoutId = setTimeout(() => {
+      let value = parseInt((<HTMLInputElement>e.target).value);
+      if (value < 8) {
+        (<HTMLInputElement>e.target).value = "8";
+      } else if (value > 128) {
+        (<HTMLInputElement>e.target).value = "128";
+      }
+    }, 2000); // 2000 milliseconds = 2 seconds
+  });
+}
+
 function generatePassword(
   length: number,
   includeNumbers: boolean,
@@ -133,22 +178,42 @@ function generatePassword(
   const specialCharacters = "!@#$%^&*()_-+=[]{};:,.<>?";
 
   let characters = lowerCaseLetters;
+  let passwordCharacters: string[] = [];
+
   if (includeCapitalLetters) {
     characters += upperCaseLetters;
+    passwordCharacters.push(
+      upperCaseLetters[Math.floor(Math.random() * upperCaseLetters.length)]
+    );
   }
   if (includeNumbers) {
     characters += numbers;
+    passwordCharacters.push(
+      numbers[Math.floor(Math.random() * numbers.length)]
+    );
   }
   if (includeSpecialCharacters) {
     characters += specialCharacters;
+    passwordCharacters.push(
+      specialCharacters[Math.floor(Math.random() * specialCharacters.length)]
+    );
   }
 
-  let password = "";
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    password += characters[randomIndex];
+  for (let i = passwordCharacters.length; i < length; i++) {
+    passwordCharacters.push(
+      characters[Math.floor(Math.random() * characters.length)]
+    );
   }
 
-  console.log(password);
+  // Shuffle the array to ensure the characters are in a random order
+  for (let i = passwordCharacters.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [passwordCharacters[i], passwordCharacters[j]] = [
+      passwordCharacters[j],
+      passwordCharacters[i],
+    ];
+  }
+
+  const password = passwordCharacters.join("");
   return password;
 }
